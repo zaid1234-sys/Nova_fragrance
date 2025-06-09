@@ -1,0 +1,161 @@
+from zipfile import ZipFile
+from PIL import Image
+import shutil
+import os
+ 
+# Create a project directory structure
+project_dir = "/mnt/data/NovaFragranceSite"
+assets_dir = os.path.join(project_dir, "assets")
+os.makedirs(assets_dir, exist_ok=True)
+
+# HTML content
+html_content = """
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Fragrance</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="assets/logo.png" alt="Logo Nova Fragrance" class="logo" />
+    <h1>Nova Fragrance</h1>
+    <p class="slogan">Luxury, bottled.</p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#">Accueil</a></li>
+      <li><a href="#catalogue">Catalogue</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="presentation">
+      <h2>Parfums pour homme — Format 10ml</h2>
+      <p>Découvrez une collection de parfums haut de gamme à prix abordable, exclusivement pour hommes. Livraison rapide à Rabat, Salé, Témara et Harhoura.</p>
+    </section>
+
+    <section id="catalogue">
+      <h2>Nos Fragrances</h2>
+      <ul class="produits">
+        <li><strong>Sauvage (Dior)</strong> – 65 dh</li>
+        <li><strong>Bleu de Chanel</strong> – 65 dh</li>
+        <li><strong>Creed Aventus</strong> – 70 dh</li>
+        <li><strong>Invictus</strong> – 60 dh</li>
+        <li><strong>1 Million</strong> – 60 dh</li>
+        <li><strong>Oud Wood</strong> – 70 dh</li>
+        <li><strong>Ombre Nomade</strong> – 70 dh</li>
+      </ul>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Commandez par WhatsApp :</p>
+      <ul>
+        <li>📞 +212 622-590750</li>
+        <li>📞 +212 666-191774</li>
+      </ul>
+      <p>📸 <a href="https://www.instagram.com/novafragrance7" target="_blank">Instagram : @novafragrance7</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Nova Fragrance. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>
+"""
+
+# CSS content
+css_content = """
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fffaf9;
+  color: #333;
+}
+
+header {
+  background-color: #000;
+  color: white;
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.logo {
+  max-width: 100px;
+}
+
+.slogan {
+  font-style: italic;
+  font-size: 1.2em;
+}
+
+nav {
+  background-color: #444;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+main {
+  padding: 20px;
+}
+
+ul.produits {
+  list-style-type: square;
+  padding-left: 20px;
+}
+
+footer {
+  background-color: #000;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  margin-top: 30px;
+}
+"""
+
+# Save HTML and CSS files
+with open(os.path.join(project_dir, "index.html"), "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+with open(os.path.join(project_dir, "style.css"), "w", encoding="utf-8") as f:
+    f.write(css_content)
+
+# Copy the logo file into the assets directory
+logo_path = "/mnt/data/0d6972aa-ad51-440f-85cc-f780c2c07bec.png"
+logo_output_path = os.path.join(assets_dir, "logo.png")
+shutil.copy(logo_path, logo_output_path)
+
+# Zip the folder
+zip_path = "/mnt/data/NovaFragranceSite.zip"
+with ZipFile(zip_path, 'w') as zipf:
+    for foldername, subfolders, filenames in os.walk(project_dir):
+        for filename in filenames:
+            file_path = os.path.join(foldername, filename)
+            arcname = os.path.relpath(file_path, start=project_dir)
+            zipf.write(file_path, arcname)
+
+zip_path
